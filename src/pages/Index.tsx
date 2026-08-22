@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CheckCircle2 } from 'lucide-react';
+import { CheckCircle2, Eye, EyeOff } from 'lucide-react';
 
 // Splash Screen
 const SplashScreen = ({ onStart }: { onStart: () => void }) => (
@@ -94,14 +94,87 @@ const RegistrationForm = ({
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
+
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const validateField = (name: string, value: string) => {
+    const newErrors = { ...errors };
+    
+    switch (name) {
+      case 'fullName':
+        if (!value.trim()) {
+          newErrors.fullName = 'Full name is required';
+        } else {
+          delete newErrors.fullName;
+        }
+        break;
+      case 'email':
+        if (!value.trim()) {
+          newErrors.email = 'Email is required';
+        } else if (!validateEmail(value)) {
+          newErrors.email = 'Please enter a valid email';
+        } else {
+          delete newErrors.email;
+        }
+        break;
+      case 'password':
+        if (!value) {
+          newErrors.password = 'Password is required';
+        } else if (value.length < 6) {
+          newErrors.password = 'Password must be at least 6 characters';
+        } else {
+          delete newErrors.password;
+        }
+        break;
+      case 'confirmPassword':
+        if (!value) {
+          newErrors.confirmPassword = 'Please confirm password';
+        } else if (value !== formData.password) {
+          newErrors.confirmPassword = 'Passwords do not match';
+        } else {
+          delete newErrors.confirmPassword;
+        }
+        break;
+      default:
+        break;
+    }
+    
+    setErrors(newErrors);
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+    if (touched[name]) {
+      validateField(name, value);
+    }
+  };
+
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setTouched({ ...touched, [name]: true });
+    validateField(name, value);
+  };
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
+    
     if (!formData.fullName.trim()) newErrors.fullName = 'Full name is required';
-    if (!formData.email.includes('@')) newErrors.email = 'Valid email is required';
-    if (formData.password.length < 6) newErrors.password = 'Password must be at least 6 characters';
-    if (formData.password !== formData.confirmPassword) newErrors.confirmPassword = 'Passwords do not match';
+    if (!formData.email.trim()) newErrors.email = 'Email is required';
+    else if (!validateEmail(formData.email)) newErrors.email = 'Please enter a valid email';
+    
+    if (!formData.password) newErrors.password = 'Password is required';
+    else if (formData.password.length < 6) newErrors.password = 'Password must be at least 6 characters';
+    
+    if (!formData.confirmPassword) newErrors.confirmPassword = 'Please confirm password';
+    else if (formData.password !== formData.confirmPassword) newErrors.confirmPassword = 'Passwords do not match';
+    
     if (!formData.agreeTerms) newErrors.agreeTerms = 'You must agree to terms';
+    
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -113,8 +186,14 @@ const RegistrationForm = ({
     }
   };
 
+  const isBgGreen = buttonColor === 'bg-green-600';
+
   return (
-    <div className={`min-h-screen bg-gradient-to-br from-blue-100 to-cyan-100 flex flex-col items-center justify-center p-4 ${buttonColor === 'bg-green-600' ? 'from-green-50 to-green-100' : ''}`}>
+    <div className={`min-h-screen bg-gradient-to-br flex flex-col items-center justify-center p-4 ${
+      isBgGreen 
+        ? 'from-green-50 to-green-100' 
+        : 'from-blue-100 to-cyan-100'
+    }`}>
       <button
         onClick={onBack}
         className="absolute top-4 left-4 text-gray-600 hover:text-gray-900 text-2xl"
@@ -122,10 +201,10 @@ const RegistrationForm = ({
         ←
       </button>
 
-      <h1 className={`text-5xl font-bold mb-2 ${buttonColor === 'bg-green-600' ? 'text-green-700' : 'text-blue-700'}`}>
+      <h1 className={`text-5xl font-bold mb-2 text-center ${isBgGreen ? 'text-green-700' : 'text-blue-700'}`}>
         {title}
       </h1>
-      <p className={`text-lg mb-8 text-center max-w-md ${buttonColor === 'bg-green-600' ? 'text-green-600' : 'text-blue-600'}`}>
+      <p className={`text-lg mb-8 text-center max-w-md ${isBgGreen ? 'text-green-600' : 'text-blue-600'}`}>
         {subtitle}
       </p>
 
@@ -135,12 +214,18 @@ const RegistrationForm = ({
           <div className="absolute left-4 top-4 text-blue-600 text-2xl">👤</div>
           <input
             type="text"
+            name="fullName"
             placeholder="Full Name"
             value={formData.fullName}
-            onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-            className="w-full pl-12 pr-4 py-3 border-2 border-gray-300 rounded-2xl focus:outline-none focus:border-blue-500"
+            onChange={handleInputChange}
+            onBlur={handleBlur}
+            className={`w-full pl-12 pr-4 py-3 border-2 rounded-2xl focus:outline-none transition ${
+              errors.fullName && touched.fullName
+                ? 'border-red-500 focus:border-red-600'
+                : 'border-gray-300 focus:border-blue-500'
+            }`}
           />
-          {errors.fullName && <p className="text-red-500 text-sm mt-1">{errors.fullName}</p>}
+          {errors.fullName && touched.fullName && <p className="text-red-500 text-sm mt-1">{errors.fullName}</p>}
         </div>
 
         {/* Email */}
@@ -148,12 +233,18 @@ const RegistrationForm = ({
           <div className="absolute left-4 top-4 text-blue-600 text-2xl">✉️</div>
           <input
             type="email"
+            name="email"
             placeholder="Email Address"
             value={formData.email}
-            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-            className="w-full pl-12 pr-4 py-3 border-2 border-gray-300 rounded-2xl focus:outline-none focus:border-blue-500"
+            onChange={handleInputChange}
+            onBlur={handleBlur}
+            className={`w-full pl-12 pr-4 py-3 border-2 rounded-2xl focus:outline-none transition ${
+              errors.email && touched.email
+                ? 'border-red-500 focus:border-red-600'
+                : 'border-gray-300 focus:border-blue-500'
+            }`}
           />
-          {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
+          {errors.email && touched.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
         </div>
 
         {/* Password */}
@@ -161,19 +252,26 @@ const RegistrationForm = ({
           <div className="absolute left-4 top-4 text-blue-600 text-2xl">🔒</div>
           <input
             type={showPassword ? 'text' : 'password'}
+            name="password"
             placeholder="Password"
             value={formData.password}
-            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-            className="w-full pl-12 pr-12 py-3 border-2 border-gray-300 rounded-2xl focus:outline-none focus:border-blue-500"
+            onChange={handleInputChange}
+            onBlur={handleBlur}
+            className={`w-full pl-12 pr-12 py-3 border-2 rounded-2xl focus:outline-none transition ${
+              errors.password && touched.password
+                ? 'border-red-500 focus:border-red-600'
+                : 'border-gray-300 focus:border-blue-500'
+            }`}
           />
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-4 top-4 text-blue-600 text-xl"
+            className="absolute right-4 top-3 text-blue-600 hover:text-blue-800 transition"
+            title={showPassword ? 'Hide password' : 'Show password'}
           >
-            {showPassword ? '👁️' : '👁️‍🗨️'}
+            {showPassword ? <Eye size={24} /> : <EyeOff size={24} />}
           </button>
-          {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
+          {errors.password && touched.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
         </div>
 
         {/* Confirm Password */}
@@ -181,39 +279,50 @@ const RegistrationForm = ({
           <div className="absolute left-4 top-4 text-blue-600 text-2xl">🔒</div>
           <input
             type={showConfirm ? 'text' : 'password'}
+            name="confirmPassword"
             placeholder="Confirm Password"
             value={formData.confirmPassword}
-            onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
-            className="w-full pl-12 pr-12 py-3 border-2 border-gray-300 rounded-2xl focus:outline-none focus:border-blue-500"
+            onChange={handleInputChange}
+            onBlur={handleBlur}
+            className={`w-full pl-12 pr-12 py-3 border-2 rounded-2xl focus:outline-none transition ${
+              errors.confirmPassword && touched.confirmPassword
+                ? 'border-red-500 focus:border-red-600'
+                : 'border-gray-300 focus:border-blue-500'
+            }`}
           />
           <button
             type="button"
             onClick={() => setShowConfirm(!showConfirm)}
-            className="absolute right-4 top-4 text-blue-600 text-xl"
+            className="absolute right-4 top-3 text-blue-600 hover:text-blue-800 transition"
+            title={showConfirm ? 'Hide password' : 'Show password'}
           >
-            {showConfirm ? '👁️' : '👁️‍🗨️'}
+            {showConfirm ? <Eye size={24} /> : <EyeOff size={24} />}
           </button>
-          {errors.confirmPassword && <p className="text-red-500 text-sm mt-1">{errors.confirmPassword}</p>}
+          {errors.confirmPassword && touched.confirmPassword && <p className="text-red-500 text-sm mt-1">{errors.confirmPassword}</p>}
         </div>
 
         {/* Terms */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 p-3 bg-white bg-opacity-50 rounded-lg">
           <input
             type="checkbox"
+            id="agreeTerms"
             checked={formData.agreeTerms}
-            onChange={(e) => setFormData({ ...formData, agreeTerms: e.target.checked })}
-            className="w-6 h-6"
+            onChange={(e) => {
+              setFormData({ ...formData, agreeTerms: e.target.checked });
+              setTouched({ ...touched, agreeTerms: true });
+            }}
+            className="w-6 h-6 cursor-pointer"
           />
-          <label className="text-gray-700">
-            I agree to the <span className="text-blue-600 font-semibold cursor-pointer">Terms of Service</span>
+          <label htmlFor="agreeTerms" className="text-gray-700 cursor-pointer">
+            I agree to the <span className="text-blue-600 font-semibold">Terms of Service</span>
           </label>
         </div>
-        {errors.agreeTerms && <p className="text-red-500 text-sm">{errors.agreeTerms}</p>}
+        {errors.agreeTerms && touched.agreeTerms && <p className="text-red-500 text-sm">{errors.agreeTerms}</p>}
 
         {/* Submit Button */}
         <button
           type="submit"
-          className={`w-full ${buttonColor} text-white font-bold py-3 rounded-2xl hover:opacity-90 transition mt-6`}
+          className={`w-full ${buttonColor} text-white font-bold py-3 rounded-2xl hover:opacity-90 transition mt-6 active:scale-95`}
         >
           Create Account
         </button>
