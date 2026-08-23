@@ -343,9 +343,10 @@ const RegistrationForm = ({
 // Learner Screen
 const LearnerScreen = ({ onBack }: { onBack: () => void }) => {
   const [classCode, setClassCode] = useState('');
-  const [selectedAvatar, setSelectedAvatar] = useState(0);
-  const [selectedMood, setSelectedMood] = useState(null);
+  const [selectedAvatar, setSelectedAvatar] = useState<number | null>(null);
+  const [selectedMood, setSelectedMood] = useState<number | null>(null);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [classCodeError, setClassCodeError] = useState('');
 
   const avatars = ['👧', '👦', '👧🧕', '👦🤓', '👧🎀'];
   const moods = [
@@ -358,14 +359,32 @@ const LearnerScreen = ({ onBack }: { onBack: () => void }) => {
     { emoji: '😠', label: 'Frustrated', ar: 'محبط' },
   ];
 
-  const handleJoinClass = () => {
-    if (classCode.trim()) {
-      setShowSuccess(true);
-      setTimeout(() => {
-        setShowSuccess(false);
-        onBack();
-      }, 2000);
+  const handleClassCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setClassCode(value);
+    if (value.trim()) {
+      setClassCodeError('');
     }
+  };
+
+  const handleJoinClass = () => {
+    if (!classCode.trim()) {
+      setClassCodeError('Please enter a class code');
+      return;
+    }
+    if (selectedAvatar === null) {
+      alert('Please select an avatar');
+      return;
+    }
+    if (selectedMood === null) {
+      alert('Please select how you are feeling');
+      return;
+    }
+    setShowSuccess(true);
+    setTimeout(() => {
+      setShowSuccess(false);
+      onBack();
+    }, 2000);
   };
 
   if (showSuccess) {
@@ -403,12 +422,17 @@ const LearnerScreen = ({ onBack }: { onBack: () => void }) => {
             type="text"
             placeholder="Enter your class code"
             value={classCode}
-            onChange={(e) => setClassCode(e.target.value)}
-            className="w-full px-4 py-3 border-2 border-gray-300 rounded-2xl mb-4 focus:outline-none focus:border-green-500"
+            onChange={handleClassCodeChange}
+            className={`w-full px-4 py-3 border-2 rounded-2xl mb-2 focus:outline-none transition ${
+              classCodeError
+                ? 'border-red-500 focus:border-red-600'
+                : 'border-gray-300 focus:border-green-500'
+            }`}
           />
+          {classCodeError && <p className="text-red-500 text-sm mb-3">{classCodeError}</p>}
           <button
             onClick={handleJoinClass}
-            className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-2xl transition flex items-center justify-center gap-2"
+            className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-2xl transition flex items-center justify-center gap-2 active:scale-95"
           >
             🚀 Join Class
           </button>
@@ -425,14 +449,18 @@ const LearnerScreen = ({ onBack }: { onBack: () => void }) => {
               <button
                 key={idx}
                 onClick={() => setSelectedAvatar(idx)}
-                className={`text-5xl p-4 rounded-3xl transition ${
-                  selectedAvatar === idx ? 'bg-green-200 ring-4 ring-green-500' : 'bg-gray-200 hover:bg-gray-300'
+                className={`text-5xl p-4 rounded-3xl transition transform hover:scale-110 active:scale-95 ${
+                  selectedAvatar === idx 
+                    ? 'bg-green-200 ring-4 ring-green-500 scale-110' 
+                    : 'bg-gray-200 hover:bg-gray-300'
                 }`}
+                title={`Avatar ${idx + 1}`}
               >
                 {avatar}
               </button>
             ))}
           </div>
+          {selectedAvatar !== null && <p className="text-center text-green-600 mt-2">✓ Avatar selected</p>}
         </div>
 
         {/* Mood Selection */}
@@ -441,18 +469,23 @@ const LearnerScreen = ({ onBack }: { onBack: () => void }) => {
           <p className="text-gray-600 mb-4">Your feelings matter.</p>
           <div className="grid grid-cols-4 md:grid-cols-7 gap-2">
             {moods.map((mood, idx) => (
-              <button
-                key={idx}
-                onClick={() => setSelectedMood(idx)}
-                className={`text-4xl p-3 rounded-full transition ${
-                  selectedMood === idx ? 'ring-4 ring-blue-500 scale-110' : 'hover:scale-110'
-                }`}
-                title={mood.label}
-              >
-                {mood.emoji}
-              </button>
+              <div key={idx} className="flex flex-col items-center">
+                <button
+                  onClick={() => setSelectedMood(idx)}
+                  className={`text-4xl p-3 rounded-full transition transform hover:scale-110 active:scale-95 ${
+                    selectedMood === idx 
+                      ? 'ring-4 ring-blue-500 scale-110 bg-blue-100' 
+                      : 'hover:bg-gray-100'
+                  }`}
+                  title={mood.label}
+                >
+                  {mood.emoji}
+                </button>
+                <p className="text-xs text-gray-600 mt-1 text-center">{mood.label}</p>
+              </div>
             ))}
           </div>
+          {selectedMood !== null && <p className="text-center text-green-600 mt-3">✓ Mood selected: {moods[selectedMood].label}</p>}
         </div>
 
         {/* Features Grid */}
@@ -476,8 +509,8 @@ const LearnerScreen = ({ onBack }: { onBack: () => void }) => {
 
 // Teacher Screen
 const TeacherScreen = ({ onBack }: { onBack: () => void }) => {
-  const [selectedAvatar, setSelectedAvatar] = useState(0);
-  const [selectedMood, setSelectedMood] = useState(null);
+  const [selectedAvatar, setSelectedAvatar] = useState<number | null>(null);
+  const [selectedMood, setSelectedMood] = useState<number | null>(null);
 
   const avatars = ['👩‍🦰', '👨‍🦱', '👩‍🦳', '👨‍🦲', '👩🏽'];
   const moods = [
