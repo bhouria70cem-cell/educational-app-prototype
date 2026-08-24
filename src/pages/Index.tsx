@@ -542,11 +542,11 @@ const TeacherScreen = ({ onBack }: { onBack: () => void }) => {
             <span className="text-2xl">🔒</span>
             <h2 className="text-2xl font-bold">Welcome! Let's help and empower! Teachers</h2>
           </div>
-          <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-2xl transition">
+          <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-2xl transition active:scale-95">
             Create & Design Assessment
           </button>
           <p className="text-center text-gray-600 text-sm mt-4">
-            Assessment ideas not working? <span className="text-blue-600 cursor-pointer">Contact support</span>
+            Assessment ideas not working? <span className="text-blue-600 cursor-pointer hover:underline">Contact support</span>
           </p>
         </div>
 
@@ -558,14 +558,18 @@ const TeacherScreen = ({ onBack }: { onBack: () => void }) => {
               <button
                 key={idx}
                 onClick={() => setSelectedAvatar(idx)}
-                className={`text-5xl p-4 rounded-3xl transition ${
-                  selectedAvatar === idx ? 'bg-blue-200 ring-4 ring-blue-500' : 'bg-gray-200 hover:bg-gray-300'
+                className={`text-5xl p-4 rounded-3xl transition transform hover:scale-110 active:scale-95 ${
+                  selectedAvatar === idx 
+                    ? 'bg-blue-200 ring-4 ring-blue-500 scale-110' 
+                    : 'bg-gray-200 hover:bg-gray-300'
                 }`}
+                title={`Avatar ${idx + 1}`}
               >
                 {avatar}
               </button>
             ))}
           </div>
+          {selectedAvatar !== null && <p className="text-center text-blue-600 mt-2">✓ Avatar selected</p>}
         </div>
 
         {/* Mood Selection */}
@@ -573,18 +577,23 @@ const TeacherScreen = ({ onBack }: { onBack: () => void }) => {
           <h3 className="text-2xl font-bold mb-4">How can we empower you today?</h3>
           <div className="grid grid-cols-4 md:grid-cols-7 gap-2">
             {moods.map((mood, idx) => (
-              <button
-                key={idx}
-                onClick={() => setSelectedMood(idx)}
-                className={`text-4xl p-3 rounded-full transition ${
-                  selectedMood === idx ? 'ring-4 ring-blue-500 scale-110' : 'hover:scale-110'
-                }`}
-                title={mood.label}
-              >
-                {mood.emoji}
-              </button>
+              <div key={idx} className="flex flex-col items-center">
+                <button
+                  onClick={() => setSelectedMood(idx)}
+                  className={`text-4xl p-3 rounded-full transition transform hover:scale-110 active:scale-95 ${
+                    selectedMood === idx 
+                      ? 'ring-4 ring-blue-500 scale-110 bg-blue-100' 
+                      : 'hover:bg-gray-100'
+                  }`}
+                  title={mood.label}
+                >
+                  {mood.emoji}
+                </button>
+                <p className="text-xs text-gray-600 mt-1 text-center">{mood.label}</p>
+              </div>
             ))}
           </div>
+          {selectedMood !== null && <p className="text-center text-blue-600 mt-3">✓ Selected: {moods[selectedMood].label}</p>}
         </div>
 
         {/* Features Grid */}
