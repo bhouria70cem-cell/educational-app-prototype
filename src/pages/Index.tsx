@@ -341,7 +341,7 @@ const RegistrationForm = ({
 };
 
 // Learner Screen
-const LearnerScreen = ({ onBack }: { onBack: () => void }) => {
+const LearnerScreen = ({ onBack, onNavigate }: { onBack: () => void; onNavigate?: (screen: string) => void }) => {
   const [classCode, setClassCode] = useState('');
   const [selectedAvatar, setSelectedAvatar] = useState<number | null>(null);
   const [selectedMood, setSelectedMood] = useState<number | null>(null);
@@ -383,7 +383,11 @@ const LearnerScreen = ({ onBack }: { onBack: () => void }) => {
     setShowSuccess(true);
     setTimeout(() => {
       setShowSuccess(false);
-      onBack();
+      if (onNavigate) {
+        onNavigate('resources');
+      } else {
+        onBack();
+      }
     }, 2000);
   };
 
@@ -615,6 +619,150 @@ const TeacherScreen = ({ onBack }: { onBack: () => void }) => {
   );
 };
 
+// Resources Screen
+const ResourcesScreen = ({ onBack }: { onBack: () => void }) => {
+  const [selectedResource, setSelectedResource] = useState<string | null>(null);
+  const [showStarted, setShowStarted] = useState(false);
+
+  const resources = [
+    {
+      id: 'audio',
+      icon: '🎤',
+      title: 'Audio Scripts',
+      titleAr: 'نصوص صوتية',
+      color: 'bg-purple-100',
+      borderColor: 'border-purple-300'
+    },
+    {
+      id: 'worksheets',
+      icon: '📋',
+      title: 'Interactive Worksheets',
+      titleAr: 'أوراق عمل تفاعلية',
+      color: 'bg-green-100',
+      borderColor: 'border-green-300'
+    },
+    {
+      id: 'games',
+      icon: '🎮',
+      title: 'Interactive Games',
+      titleAr: 'ألعاب تفاعلية',
+      color: 'bg-blue-100',
+      borderColor: 'border-blue-300'
+    }
+  ];
+
+  const handleResourceSelect = (resourceId: string) => {
+    setSelectedResource(resourceId);
+  };
+
+  const handleStartNow = () => {
+    if (selectedResource) {
+      setShowStarted(true);
+      setTimeout(() => {
+        setShowStarted(false);
+        onBack();
+      }, 2000);
+    } else {
+      alert('Please select a resource first');
+    }
+  };
+
+  if (showStarted) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-purple-300 via-pink-200 to-cyan-300 flex items-center justify-center p-4">
+        <div className="text-center">
+          <CheckCircle2 className="w-24 h-24 text-green-600 mx-auto mb-4" />
+          <h1 className="text-4xl font-bold text-green-700 mb-2">Ready to Learn!</h1>
+          <p className="text-lg text-green-600">Loading {selectedResource}...</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-purple-300 via-pink-200 to-cyan-300 p-4 md:p-8">
+      <button
+        onClick={onBack}
+        className="mb-6 text-gray-600 hover:text-gray-900 text-2xl"
+      >
+        ←
+      </button>
+
+      <div className="max-w-2xl mx-auto text-center">
+        {/* Header */}
+        <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-2">Welcome!</h1>
+        <p className="text-2xl text-green-700 font-semibold mb-1">مرحباً بك!</p>
+        <div className="flex justify-center gap-1 mb-8">
+          <div className="w-2 h-2 bg-green-600 rounded-full"></div>
+          <div className="w-6 h-2 bg-green-600 rounded-full"></div>
+        </div>
+
+        {/* Resource Cards */}
+        <div className="grid md:grid-cols-3 gap-6 mb-8">
+          {resources.map((resource) => (
+            <button
+              key={resource.id}
+              onClick={() => handleResourceSelect(resource.id)}
+              className={`p-6 rounded-3xl transition transform hover:scale-105 active:scale-95 border-2 ${
+                selectedResource === resource.id
+                  ? `${resource.color} ${resource.borderColor} border-2 ring-4 ring-offset-2 scale-105`
+                  : `${resource.color} border-transparent hover:shadow-lg`
+              }`}
+            >
+              <div className="text-5xl mb-4">{resource.icon}</div>
+              <h3 className="text-xl font-bold text-gray-900 mb-1">{resource.title}</h3>
+              <p className="text-sm text-gray-700">{resource.titleAr}</p>
+              {selectedResource === resource.id && (
+                <div className="mt-3 text-green-600 font-semibold">✓ Selected</div>
+              )}
+            </button>
+          ))}
+        </div>
+
+        {/* Start Now Button */}
+        <button
+          onClick={handleStartNow}
+          className="w-full md:w-2/3 mx-auto block bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-4 px-8 rounded-full text-xl transition transform hover:scale-105 active:scale-95 shadow-lg mb-12"
+        >
+          Start now ابدأ الآن
+        </button>
+
+        {/* Illustration */}
+        <div className="mt-12">
+          <div className="bg-white bg-opacity-80 rounded-3xl p-8 shadow-xl">
+            <div className="flex flex-col md:flex-row items-center justify-center gap-8">
+              {/* Teacher Illustration */}
+              <div className="flex-1 flex justify-center">
+                <div className="text-center">
+                  <div className="text-6xl mb-4">👨‍🏫</div>
+                  <p className="text-sm text-gray-600">Your Learning Guide</p>
+                </div>
+              </div>
+
+              {/* Decorative Plants */}
+              <div className="flex-1 flex justify-center">
+                <div className="text-center">
+                  <div className="text-5xl mb-2">🌿</div>
+                  <div className="text-4xl mb-2">📚</div>
+                  <div className="text-4xl">🌱</div>
+                </div>
+              </div>
+
+              {/* Family Illustration */}
+              <div className="flex-1 flex justify-center">
+                <div className="text-center">
+                  <div className="text-6xl mb-4">👩‍👧‍👦</div>
+                  <p className="text-sm text-gray-600">Learning Together</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 // Main App Component
 const Index = () => {
   const [screen, setScreen] = useState('splash');
@@ -650,8 +798,9 @@ const Index = () => {
           buttonColor="bg-blue-600"
         />
       )}
-      {screen === 'learner' && <LearnerScreen onBack={() => handleNavigation('home')} />}
+      {screen === 'learner' && <LearnerScreen onBack={() => handleNavigation('home')} onNavigate={handleNavigation} />}
       {screen === 'teacher' && <TeacherScreen onBack={() => handleNavigation('home')} />}
+      {screen === 'resources' && <ResourcesScreen onBack={() => handleNavigation('home')} />}
     </div>
   );
 };
