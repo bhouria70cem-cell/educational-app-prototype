@@ -512,9 +512,10 @@ const LearnerScreen = ({ onBack, onNavigate }: { onBack: () => void; onNavigate?
 };
 
 // Teacher Screen
-const TeacherScreen = ({ onBack }: { onBack: () => void }) => {
+const TeacherScreen = ({ onBack, onNavigate }: { onBack: () => void; onNavigate?: (screen: string) => void }) => {
   const [selectedAvatar, setSelectedAvatar] = useState<number | null>(null);
   const [selectedMood, setSelectedMood] = useState<number | null>(null);
+  const [showAssessmentSuccess, setShowAssessmentSuccess] = useState(false);
 
   const avatars = ['👩‍🦰', '👨‍🦱', '👩‍🦳', '👨‍🦲', '👩🏽'];
   const moods = [
@@ -526,6 +527,28 @@ const TeacherScreen = ({ onBack }: { onBack: () => void }) => {
     { emoji: '😰', label: 'Stressed' },
     { emoji: '😢', label: 'Overwhelmed' },
   ];
+
+  const handleCreateAssessment = () => {
+    setShowAssessmentSuccess(true);
+    setTimeout(() => {
+      setShowAssessmentSuccess(false);
+      if (onNavigate) {
+        onNavigate('resources');
+      }
+    }, 2000);
+  };
+
+  if (showAssessmentSuccess) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-100 to-cyan-100 flex items-center justify-center p-4">
+        <div className="text-center">
+          <CheckCircle2 className="w-24 h-24 text-blue-600 mx-auto mb-4" />
+          <h1 className="text-4xl font-bold text-blue-700 mb-2">Success!</h1>
+          <p className="text-lg text-blue-600">Assessment created successfully</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-100 to-cyan-100 p-4">
@@ -546,7 +569,10 @@ const TeacherScreen = ({ onBack }: { onBack: () => void }) => {
             <span className="text-2xl">🔒</span>
             <h2 className="text-2xl font-bold">Welcome! Let's help and empower! Teachers</h2>
           </div>
-          <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-2xl transition active:scale-95">
+          <button 
+            onClick={handleCreateAssessment}
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-2xl transition active:scale-95 transform hover:shadow-lg"
+          >
             Create & Design Assessment
           </button>
           <p className="text-center text-gray-600 text-sm mt-4">
@@ -799,7 +825,7 @@ const Index = () => {
         />
       )}
       {screen === 'learner' && <LearnerScreen onBack={() => handleNavigation('home')} onNavigate={handleNavigation} />}
-      {screen === 'teacher' && <TeacherScreen onBack={() => handleNavigation('home')} />}
+      {screen === 'teacher' && <TeacherScreen onBack={() => handleNavigation('home')} onNavigate={handleNavigation} />}
       {screen === 'resources' && <ResourcesScreen onBack={() => handleNavigation('home')} />}
     </div>
   );
