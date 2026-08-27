@@ -7,12 +7,8 @@ import splashBg from '../assets/splash-bg.png';
 const SplashScreen = ({ onStart }: { onStart: () => void }) => (
   <div className="min-h-screen bg-gradient-to-br from-purple-300 via-pink-200 to-cyan-300 flex flex-col items-center justify-center p-4">
     <div className="text-center mb-12">
-      <div className="w-40 h-40 mx-auto mb-8 flex items-center justify-center">
-        <img 
-          src={logoImage}
-          alt="AssessAI Logo" 
-          className="w-full h-full object-contain drop-shadow-2xl"
-        />
+      <div className="w-32 h-32 mx-auto mb-8 bg-gradient-to-br from-cyan-400 to-purple-600 rounded-3xl flex items-center justify-center border-4 border-cyan-300 shadow-2xl">
+        <div className="text-5xl">🧠</div>
       </div>
       <h1 className="text-5xl font-bold text-gray-900 mb-2">AssessAI</h1>
       <p className="text-xl text-gray-700 mb-2">dz</p>
