@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { CheckCircle2, Eye, EyeOff } from 'lucide-react';
+import logoImage from '../assets/logo.svg';
 
 // Splash Screen
 const SplashScreen = ({ onStart }: { onStart: () => void }) => (
@@ -7,7 +8,7 @@ const SplashScreen = ({ onStart }: { onStart: () => void }) => (
     <div className="text-center mb-12">
       <div className="w-40 h-40 mx-auto mb-8 flex items-center justify-center">
         <img 
-          src="https://uploads.buildify.cloud/projects/1090c18f-1e44-476c-9cb7-abb9d79b4dca/assets/2bab0519-2573-47ed-965e-91a7e5484d8a.png" 
+          src={logoImage}
           alt="AssessAI Logo" 
           className="w-full h-full object-contain drop-shadow-2xl"
         />
