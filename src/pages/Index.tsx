@@ -1,10 +1,19 @@
 import React, { useState } from 'react';
 import { CheckCircle2, Eye, EyeOff } from 'lucide-react';
 import logoImage from '../assets/logo.svg';
+import splashBg from '../assets/splash-bg.png';
 
 // Splash Screen
 const SplashScreen = ({ onStart }: { onStart: () => void }) => (
-  <div className="min-h-screen bg-gradient-to-br from-purple-300 via-pink-200 to-cyan-300 flex flex-col items-center justify-center p-4">
+  <div 
+    className="min-h-screen flex flex-col items-center justify-center p-4 bg-cover bg-center"
+    style={{
+      backgroundImage: `url(${splashBg})`,
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundAttachment: 'fixed'
+    }}
+  >
     <div className="text-center mb-12">
       <div className="w-40 h-40 mx-auto mb-8 flex items-center justify-center">
         <img 
@@ -13,22 +22,20 @@ const SplashScreen = ({ onStart }: { onStart: () => void }) => (
           className="w-full h-full object-contain drop-shadow-2xl"
         />
       </div>
-      <h1 className="text-5xl font-bold text-gray-900 mb-2">AssessAI</h1>
-      <p className="text-xl text-gray-700 mb-2">dz</p>
-      <h2 className="text-3xl font-bold text-gray-900 mb-4">AI-powered assessment platform</h2>
+      <h2 className="text-4xl font-bold text-gray-900 mb-6">AI-powered<br />assessment platform</h2>
       <p className="text-lg text-gray-700 mb-2">منصة تقييم مدعومة بالذكاء الاصطناعي</p>
-      <p className="text-sm text-red-600 font-semibold">Aligned with English national syllabus</p>
-      <p className="text-sm text-red-600 mb-8">متوافق مع المنهاج الوطني للغة الإنجليزية</p>
+      <p className="text-sm text-red-600 font-semibold mb-2">Aligned with English national syllabus</p>
+      <p className="text-sm text-red-600 mb-12">متوافق مع المنهاج الوطني للغة الإنجليزية</p>
     </div>
     <button
       onClick={onStart}
-      className="bg-gradient-to-r from-purple-500 to-cyan-400 hover:from-purple-600 hover:to-cyan-500 text-white font-bold py-4 px-12 rounded-full text-lg transition transform hover:scale-105 flex items-center gap-2"
+      className="bg-gradient-to-r from-purple-500 to-cyan-400 hover:from-purple-600 hover:to-cyan-500 text-white font-bold py-4 px-16 rounded-full text-lg transition transform hover:scale-105 active:scale-95 flex items-center gap-2 mb-4 shadow-lg"
     >
       Start <span className="text-xl">›</span>
     </button>
     <button
       onClick={onStart}
-      className="bg-gradient-to-r from-purple-500 to-cyan-400 hover:from-purple-600 hover:to-cyan-500 text-white font-bold py-4 px-12 rounded-full text-lg transition transform hover:scale-105 flex items-center gap-2 mt-4"
+      className="bg-gradient-to-r from-purple-500 to-cyan-400 hover:from-purple-600 hover:to-cyan-500 text-white font-bold py-4 px-16 rounded-full text-lg transition transform hover:scale-105 active:scale-95 flex items-center gap-2 shadow-lg"
     >
       ابدأ <span className="text-xl">›</span>
     </button>
