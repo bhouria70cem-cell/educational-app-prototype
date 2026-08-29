@@ -79,12 +79,14 @@ const RegistrationForm = ({
   onSubmit,
   onBack,
   buttonColor = 'bg-blue-600',
+  isTeacher = false,
 }: {
   title: string;
   subtitle: string;
   onSubmit: (data: any) => void;
   onBack: () => void;
   buttonColor?: string;
+  isTeacher?: boolean;
 }) => {
   const [formData, setFormData] = useState({
     fullName: '',
@@ -332,11 +334,15 @@ const RegistrationForm = ({
         <div className="text-center text-gray-600 py-2">or</div>
         <button
           type="button"
-          onClick={onBack}
-          className="w-full text-center text-blue-600 font-semibold hover:underline"
+          onClick={() => alert('Group Account feature coming soon!')}
+          className={`w-full ${buttonColor} text-white font-bold py-3 rounded-2xl hover:opacity-90 transition active:scale-95`}
         >
-          Already have an account? Sign In
+          Group Account
         </button>
+
+        <div className="text-center text-gray-600 py-2 text-sm">
+          Already have an account? <span onClick={onBack} className="text-blue-600 font-semibold hover:underline cursor-pointer">Sign In</span>
+        </div>
       </form>
     </div>
   );
@@ -824,6 +830,7 @@ const Index = () => {
           onSubmit={() => handleRegistration('teacher')}
           onBack={() => handleNavigation('home')}
           buttonColor="bg-blue-600"
+          isTeacher={true}
         />
       )}
       {screen === 'learner' && <LearnerScreen onBack={() => handleNavigation('home')} onNavigate={handleNavigation} />}
