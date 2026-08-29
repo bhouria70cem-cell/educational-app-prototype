@@ -99,6 +99,9 @@ const RegistrationForm = ({
   const [showConfirm, setShowConfirm] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
+  const [isGroupMode, setIsGroupMode] = useState(false);
+  const [groupCode, setGroupCode] = useState('');
+  const [groupCodeError, setGroupCodeError] = useState('');
 
   const validateEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -185,6 +188,14 @@ const RegistrationForm = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (isGroupMode) {
+      if (!groupCode.trim()) {
+        setGroupCodeError('Group code is required');
+        return;
+      }
+    }
+    
     if (validateForm()) {
       onSubmit(formData);
     }
@@ -213,6 +224,29 @@ const RegistrationForm = ({
       </p>
 
       <form onSubmit={handleSubmit} className="w-full max-w-md space-y-4">
+        {isGroupMode && (
+          <div className="relative bg-blue-50 p-4 rounded-2xl border-2 border-blue-300 mb-4">
+            <div className="absolute left-4 top-4 text-blue-600 text-2xl">🔑</div>
+            <input
+              type="text"
+              placeholder="Enter Group Code"
+              value={groupCode}
+              onChange={(e) => {
+                setGroupCode(e.target.value);
+                if (e.target.value.trim()) {
+                  setGroupCodeError('');
+                }
+              }}
+              className={`w-full pl-12 pr-4 py-3 border-2 rounded-2xl focus:outline-none transition ${
+                groupCodeError
+                  ? 'border-red-500 focus:border-red-600'
+                  : 'border-gray-300 focus:border-blue-500'
+              }`}
+            />
+            {groupCodeError && <p className="text-red-500 text-sm mt-2">{groupCodeError}</p>}
+            <p className="text-xs text-gray-600 mt-2">Enter the group code provided by your administrator</p>
+          </div>
+        )}
         {/* Full Name */}
         <div className="relative">
           <div className="absolute left-4 top-4 text-blue-600 text-2xl">👤</div>
@@ -334,10 +368,10 @@ const RegistrationForm = ({
         <div className="text-center text-gray-600 py-2">or</div>
         <button
           type="button"
-          onClick={() => alert('Group Account feature coming soon!')}
+          onClick={() => setIsGroupMode(!isGroupMode)}
           className={`w-full ${buttonColor} text-white font-bold py-3 rounded-2xl hover:opacity-90 transition active:scale-95`}
         >
-          Group Account
+          {isGroupMode ? 'Back to Individual' : 'Group Account'}
         </button>
 
         <div className="text-center text-gray-600 py-2 text-sm">
