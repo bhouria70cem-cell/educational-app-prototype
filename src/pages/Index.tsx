@@ -225,7 +225,7 @@ const RegistrationForm = ({
 
       <form onSubmit={handleSubmit} className="w-full max-w-md space-y-4">
         {isGroupMode && (
-          <div className="relative bg-blue-50 p-4 rounded-2xl border-2 border-blue-300 mb-4">
+          <div className="relative bg-white p-4 rounded-2xl border-2 border-blue-300 mb-4 shadow-md">
             <div className="absolute left-4 top-4 text-blue-600 text-2xl">🔑</div>
             <input
               type="text"
@@ -237,13 +237,13 @@ const RegistrationForm = ({
                   setGroupCodeError('');
                 }
               }}
-              className={`w-full pl-12 pr-4 py-3 border-2 rounded-2xl focus:outline-none transition ${
+              className={`w-full pl-12 pr-4 py-3 border-2 rounded-2xl focus:outline-none transition text-gray-900 bg-white placeholder-gray-400 ${
                 groupCodeError
-                  ? 'border-red-500 focus:border-red-600'
-                  : 'border-gray-300 focus:border-blue-500'
+                  ? 'border-red-500 focus:border-red-600 focus:ring-2 focus:ring-red-200'
+                  : 'border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200'
               }`}
             />
-            {groupCodeError && <p className="text-red-500 text-sm mt-2">{groupCodeError}</p>}
+            {groupCodeError && <p className="text-red-600 text-sm mt-2 font-medium">{groupCodeError}</p>}
             <p className="text-xs text-gray-600 mt-2">Enter the group code provided by your administrator</p>
           </div>
         )}
@@ -257,13 +257,13 @@ const RegistrationForm = ({
             value={formData.fullName}
             onChange={handleInputChange}
             onBlur={handleBlur}
-            className={`w-full pl-12 pr-4 py-3 border-2 rounded-2xl focus:outline-none transition ${
+            className={`w-full pl-12 pr-4 py-3 border-2 rounded-2xl focus:outline-none transition text-gray-900 bg-white placeholder-gray-400 font-medium ${
               errors.fullName && touched.fullName
-                ? 'border-red-500 focus:border-red-600'
-                : 'border-gray-300 focus:border-blue-500'
+                ? 'border-red-500 focus:border-red-600 focus:ring-2 focus:ring-red-200'
+                : 'border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200'
             }`}
           />
-          {errors.fullName && touched.fullName && <p className="text-red-500 text-sm mt-1">{errors.fullName}</p>}
+          {errors.fullName && touched.fullName && <p className="text-red-600 text-sm mt-1 font-medium">{errors.fullName}</p>}
         </div>
 
         {/* Email */}
@@ -276,13 +276,13 @@ const RegistrationForm = ({
             value={formData.email}
             onChange={handleInputChange}
             onBlur={handleBlur}
-            className={`w-full pl-12 pr-4 py-3 border-2 rounded-2xl focus:outline-none transition ${
+            className={`w-full pl-12 pr-4 py-3 border-2 rounded-2xl focus:outline-none transition text-gray-900 bg-white placeholder-gray-400 font-medium ${
               errors.email && touched.email
-                ? 'border-red-500 focus:border-red-600'
-                : 'border-gray-300 focus:border-blue-500'
+                ? 'border-red-500 focus:border-red-600 focus:ring-2 focus:ring-red-200'
+                : 'border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200'
             }`}
           />
-          {errors.email && touched.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
+          {errors.email && touched.email && <p className="text-red-600 text-sm mt-1 font-medium">{errors.email}</p>}
         </div>
 
         {/* Password */}
@@ -295,21 +295,21 @@ const RegistrationForm = ({
             value={formData.password}
             onChange={handleInputChange}
             onBlur={handleBlur}
-            className={`w-full pl-12 pr-12 py-3 border-2 rounded-2xl focus:outline-none transition ${
+            className={`w-full pl-12 pr-12 py-3 border-2 rounded-2xl focus:outline-none transition text-gray-900 bg-white placeholder-gray-400 font-medium ${
               errors.password && touched.password
-                ? 'border-red-500 focus:border-red-600'
-                : 'border-gray-300 focus:border-blue-500'
+                ? 'border-red-500 focus:border-red-600 focus:ring-2 focus:ring-red-200'
+                : 'border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200'
             }`}
           />
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-4 top-3 text-blue-600 hover:text-blue-800 transition"
+            className="absolute right-4 top-3 text-blue-600 hover:text-blue-800 transition active:scale-90"
             title={showPassword ? 'Hide password' : 'Show password'}
           >
             {showPassword ? <Eye size={24} /> : <EyeOff size={24} />}
           </button>
-          {errors.password && touched.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
+          {errors.password && touched.password && <p className="text-red-600 text-sm mt-1 font-medium">{errors.password}</p>}
         </div>
 
         {/* Confirm Password */}
@@ -322,25 +322,25 @@ const RegistrationForm = ({
             value={formData.confirmPassword}
             onChange={handleInputChange}
             onBlur={handleBlur}
-            className={`w-full pl-12 pr-12 py-3 border-2 rounded-2xl focus:outline-none transition ${
+            className={`w-full pl-12 pr-12 py-3 border-2 rounded-2xl focus:outline-none transition text-gray-900 bg-white placeholder-gray-400 font-medium ${
               errors.confirmPassword && touched.confirmPassword
-                ? 'border-red-500 focus:border-red-600'
-                : 'border-gray-300 focus:border-blue-500'
+                ? 'border-red-500 focus:border-red-600 focus:ring-2 focus:ring-red-200'
+                : 'border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200'
             }`}
           />
           <button
             type="button"
             onClick={() => setShowConfirm(!showConfirm)}
-            className="absolute right-4 top-3 text-blue-600 hover:text-blue-800 transition"
+            className="absolute right-4 top-3 text-blue-600 hover:text-blue-800 transition active:scale-90"
             title={showConfirm ? 'Hide password' : 'Show password'}
           >
             {showConfirm ? <Eye size={24} /> : <EyeOff size={24} />}
           </button>
-          {errors.confirmPassword && touched.confirmPassword && <p className="text-red-500 text-sm mt-1">{errors.confirmPassword}</p>}
+          {errors.confirmPassword && touched.confirmPassword && <p className="text-red-600 text-sm mt-1 font-medium">{errors.confirmPassword}</p>}
         </div>
 
         {/* Terms */}
-        <div className="flex items-center gap-3 p-3 bg-white bg-opacity-50 rounded-lg">
+        <div className="flex items-center gap-3 p-4 bg-white rounded-lg border-2 border-gray-200 hover:border-gray-300 transition">
           <input
             type="checkbox"
             id="agreeTerms"
@@ -349,13 +349,13 @@ const RegistrationForm = ({
               setFormData({ ...formData, agreeTerms: e.target.checked });
               setTouched({ ...touched, agreeTerms: true });
             }}
-            className="w-6 h-6 cursor-pointer"
+            className="w-6 h-6 cursor-pointer accent-blue-600"
           />
-          <label htmlFor="agreeTerms" className="text-gray-700 cursor-pointer">
-            I agree to the <span className="text-blue-600 font-semibold">Terms of Service</span>
+          <label htmlFor="agreeTerms" className="text-gray-900 cursor-pointer font-medium">
+            I agree to the <span className="text-blue-600 font-semibold hover:underline">Terms of Service</span>
           </label>
         </div>
-        {errors.agreeTerms && touched.agreeTerms && <p className="text-red-500 text-sm">{errors.agreeTerms}</p>}
+        {errors.agreeTerms && touched.agreeTerms && <p className="text-red-600 text-sm font-medium">{errors.agreeTerms}</p>}
 
         {/* Submit Button */}
         <button
@@ -469,13 +469,13 @@ const LearnerScreen = ({ onBack, onNavigate }: { onBack: () => void; onNavigate?
             placeholder="Enter your class code"
             value={classCode}
             onChange={handleClassCodeChange}
-            className={`w-full px-4 py-3 border-2 rounded-2xl mb-2 focus:outline-none transition ${
+            className={`w-full px-4 py-3 border-2 rounded-2xl mb-2 focus:outline-none transition text-gray-900 bg-white placeholder-gray-400 font-medium ${
               classCodeError
-                ? 'border-red-500 focus:border-red-600'
-                : 'border-gray-300 focus:border-green-500'
+                ? 'border-red-500 focus:border-red-600 focus:ring-2 focus:ring-red-200'
+                : 'border-gray-300 focus:border-green-500 focus:ring-2 focus:ring-green-200'
             }`}
           />
-          {classCodeError && <p className="text-red-500 text-sm mb-3">{classCodeError}</p>}
+          {classCodeError && <p className="text-red-600 text-sm mb-3 font-medium">{classCodeError}</p>}
           <button
             onClick={handleJoinClass}
             className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-2xl transition flex items-center justify-center gap-2 active:scale-95"
@@ -495,10 +495,10 @@ const LearnerScreen = ({ onBack, onNavigate }: { onBack: () => void; onNavigate?
               <button
                 key={idx}
                 onClick={() => setSelectedAvatar(idx)}
-                className={`text-5xl p-4 rounded-3xl transition transform hover:scale-110 active:scale-95 ${
+                className={`text-5xl p-4 rounded-3xl transition transform hover:scale-110 active:scale-95 cursor-pointer shadow-md ${
                   selectedAvatar === idx 
-                    ? 'bg-green-200 ring-4 ring-green-500 scale-110' 
-                    : 'bg-gray-200 hover:bg-gray-300'
+                    ? 'bg-green-200 ring-4 ring-green-500 scale-110 shadow-lg' 
+                    : 'bg-white hover:bg-gray-50 border-2 border-gray-200 hover:border-green-300'
                 }`}
                 title={`Avatar ${idx + 1}`}
               >
@@ -518,20 +518,20 @@ const LearnerScreen = ({ onBack, onNavigate }: { onBack: () => void; onNavigate?
               <div key={idx} className="flex flex-col items-center">
                 <button
                   onClick={() => setSelectedMood(idx)}
-                  className={`text-4xl p-3 rounded-full transition transform hover:scale-110 active:scale-95 ${
+                  className={`text-4xl p-3 rounded-full transition transform hover:scale-110 active:scale-95 cursor-pointer shadow-md ${
                     selectedMood === idx 
-                      ? 'ring-4 ring-blue-500 scale-110 bg-blue-100' 
-                      : 'hover:bg-gray-100'
+                      ? 'ring-4 ring-green-500 scale-110 bg-green-100 shadow-lg' 
+                      : 'bg-white hover:bg-gray-50 border-2 border-gray-200 hover:border-green-300'
                   }`}
                   title={mood.label}
                 >
                   {mood.emoji}
                 </button>
-                <p className="text-xs text-gray-600 mt-1 text-center">{mood.label}</p>
+                <p className="text-xs text-gray-700 font-medium mt-1 text-center">{mood.label}</p>
               </div>
             ))}
           </div>
-          {selectedMood !== null && <p className="text-center text-green-600 mt-3">✓ Mood selected: {moods[selectedMood].label}</p>}
+          {selectedMood !== null && <p className="text-center text-green-600 mt-3 font-medium">✓ Mood selected: {moods[selectedMood].label}</p>}
         </div>
 
         {/* Features Grid */}
@@ -630,10 +630,10 @@ const TeacherScreen = ({ onBack, onNavigate }: { onBack: () => void; onNavigate?
               <button
                 key={idx}
                 onClick={() => setSelectedAvatar(idx)}
-                className={`text-5xl p-4 rounded-3xl transition transform hover:scale-110 active:scale-95 ${
+                className={`text-5xl p-4 rounded-3xl transition transform hover:scale-110 active:scale-95 cursor-pointer shadow-md ${
                   selectedAvatar === idx 
-                    ? 'bg-blue-200 ring-4 ring-blue-500 scale-110' 
-                    : 'bg-gray-200 hover:bg-gray-300'
+                    ? 'bg-blue-200 ring-4 ring-blue-500 scale-110 shadow-lg' 
+                    : 'bg-white hover:bg-gray-50 border-2 border-gray-200 hover:border-blue-300'
                 }`}
                 title={`Avatar ${idx + 1}`}
               >
@@ -641,7 +641,7 @@ const TeacherScreen = ({ onBack, onNavigate }: { onBack: () => void; onNavigate?
               </button>
             ))}
           </div>
-          {selectedAvatar !== null && <p className="text-center text-blue-600 mt-2">✓ Avatar selected</p>}
+          {selectedAvatar !== null && <p className="text-center text-blue-600 mt-2 font-medium">✓ Avatar selected</p>}
         </div>
 
         {/* Mood Selection */}
@@ -652,20 +652,20 @@ const TeacherScreen = ({ onBack, onNavigate }: { onBack: () => void; onNavigate?
               <div key={idx} className="flex flex-col items-center">
                 <button
                   onClick={() => setSelectedMood(idx)}
-                  className={`text-4xl p-3 rounded-full transition transform hover:scale-110 active:scale-95 ${
+                  className={`text-4xl p-3 rounded-full transition transform hover:scale-110 active:scale-95 cursor-pointer shadow-md ${
                     selectedMood === idx 
-                      ? 'ring-4 ring-blue-500 scale-110 bg-blue-100' 
-                      : 'hover:bg-gray-100'
+                      ? 'ring-4 ring-blue-500 scale-110 bg-blue-100 shadow-lg' 
+                      : 'bg-white hover:bg-gray-50 border-2 border-gray-200 hover:border-blue-300'
                   }`}
                   title={mood.label}
                 >
                   {mood.emoji}
                 </button>
-                <p className="text-xs text-gray-600 mt-1 text-center">{mood.label}</p>
+                <p className="text-xs text-gray-700 font-medium mt-1 text-center">{mood.label}</p>
               </div>
             ))}
           </div>
-          {selectedMood !== null && <p className="text-center text-blue-600 mt-3">✓ Selected: {moods[selectedMood].label}</p>}
+          {selectedMood !== null && <p className="text-center text-blue-600 mt-3 font-medium">✓ Selected: {moods[selectedMood].label}</p>}
         </div>
 
         {/* Features Grid */}
@@ -771,17 +771,17 @@ const ResourcesScreen = ({ onBack }: { onBack: () => void }) => {
             <button
               key={resource.id}
               onClick={() => handleResourceSelect(resource.id)}
-              className={`p-6 rounded-3xl transition transform hover:scale-105 active:scale-95 border-2 ${
+              className={`p-6 rounded-3xl transition transform hover:scale-105 active:scale-95 border-2 cursor-pointer shadow-md ${
                 selectedResource === resource.id
-                  ? `${resource.color} ${resource.borderColor} border-2 ring-4 ring-offset-2 scale-105`
-                  : `${resource.color} border-transparent hover:shadow-lg`
+                  ? `${resource.color} ${resource.borderColor} border-2 ring-4 ring-offset-2 scale-105 shadow-lg`
+                  : `bg-white border-gray-200 hover:${resource.borderColor} hover:shadow-lg`
               }`}
             >
               <div className="text-5xl mb-4">{resource.icon}</div>
               <h3 className="text-xl font-bold text-gray-900 mb-1">{resource.title}</h3>
-              <p className="text-sm text-gray-700">{resource.titleAr}</p>
+              <p className="text-sm text-gray-700 font-medium">{resource.titleAr}</p>
               {selectedResource === resource.id && (
-                <div className="mt-3 text-green-600 font-semibold">✓ Selected</div>
+                <div className="mt-3 text-green-600 font-bold">✓ Selected</div>
               )}
             </button>
           ))}
@@ -790,7 +790,7 @@ const ResourcesScreen = ({ onBack }: { onBack: () => void }) => {
         {/* Start Now Button */}
         <button
           onClick={handleStartNow}
-          className="w-full md:w-2/3 mx-auto block bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-4 px-8 rounded-full text-xl transition transform hover:scale-105 active:scale-95 shadow-lg mb-12"
+          className="w-full md:w-2/3 mx-auto block bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-4 px-8 rounded-full text-xl transition transform hover:scale-105 active:scale-95 shadow-lg mb-12 cursor-pointer"
         >
           Start now ابدأ الآن
         </button>
